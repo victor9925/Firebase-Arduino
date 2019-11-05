@@ -8,7 +8,7 @@ from tkinter import *
 from PIL import Image
 from PIL import ImageTk
 import time
-cont=0
+cont=100
 prom=0
 
 placa = Arduino ('COM5')
@@ -49,7 +49,7 @@ variable=StringVar()
 valor2= Label(marco1, bg='cadet blue1', font=("Arial Bold", 15), fg="white", width=5)
 adc_data=StringVar()
 
-def update_label():
+def Leds_on():
 
     led5.write(1)
     
@@ -102,19 +102,41 @@ def adc_read():
         'sensor1/adc': prom
     })
 
-def save():
-    ref = db.reference('sensor')
-    ref.update({
-        'sensor3/message': 'hola'
-    })
-    
+def update_label():
+    global cont
+    if cont>4:
+        cont=cont-2
+        ref = db.reference("sensor")
+        ref.update({
+                    'sensor1': {
+                        'valor': cont,
+
+                }
+             })
+    if cont==4:
+        cont=cont-2
+        ref = db.reference("sensor")
+        ref.update({
+                    'sensor1': {
+                        'valor': 0,
+                 }
+             })
+    if cont==2:
+        cont=cont-2
+        ref = db.reference("sensor")
+        ref.update({
+                    'sensor1': {
+                        'valor': 0,
+                 }
+             })   
+    variable.set(cont)
     
   
 
 valor.configure(textvariable=variable)
 valor.place(x=20, y=90)
 
-leds_on=Button(marco1,text="LEDS_ON",command=update_label)
+leds_on=Button(marco1,text="LEDS_ON",command=Leds_on)
 leds_on.place(x=80, y=160)
 
 valor2.configure(textvariable=adc_data)
@@ -126,6 +148,8 @@ prom_15.place(x=20, y=160)
 save_button=Button(marco1,text="LEDS_OFF",command=Leds_off)
 save_button.place(x=170, y=160)
 
+save_button=Button(marco1,text="CONT",command=update_label)
+save_button.place(x=250, y=160)
 
 
 
