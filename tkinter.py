@@ -11,16 +11,17 @@ import time
 cont=0
 prom=0
 
-placa = Arduino ('COM3')
+placa = Arduino ('COM5')
 it = util.Iterator(placa)
 it.start()
 a_0 = placa.get_pin('a:0:i')
-led1 = placa.get_pin('d:3:p')
-led2 = placa.get_pin('d:5:p')
-led3 = placa.get_pin('d:6:p')
-led4 = placa.get_pin('d:9:p')
-led5 = placa.get_pin('d:10:p')
-led6 = placa.get_pin('d:11:p')
+led1 = placa.get_pin('d:3:o')
+led2 = placa.get_pin('d:5:o')
+led3 = placa.get_pin('d:6:o')
+led4 = placa.get_pin('d:9:o')
+led5 = placa.get_pin('d:10:o')
+led6 = placa.get_pin('d:11:o')
+led7 = placa.get_pin('d:12:o')
 time.sleep(0.5)
 ventana = Tk()
 ventana.geometry('1080x800')
@@ -49,17 +50,22 @@ valor2= Label(marco1, bg='cadet blue1', font=("Arial Bold", 15), fg="white", wid
 adc_data=StringVar()
 
 def update_label():
-    global cont
-    cont=cont+1
+
+    led5.write(1)
+    
+    led6.write(1)
+    
+    led7.write(1)
+    
     ref = db.reference("sensor")
+    
     ref.update({
-                'sensor2': {
-                    'adc': 0,
-                    'valor': cont,
+                  'sensor1/led10': 'on',
+                  'sensor1/led11': 'on',
+                  'sensor1/led12': 'on'
                     
-            }
          })
-    variable.set(cont)
+   
 
 def adc_read():
     global prom
@@ -92,8 +98,8 @@ def save():
 valor.configure(textvariable=variable)
 valor.place(x=20, y=90)
 
-start_button=Button(marco1,text="cont",command=update_label)
-start_button.place(x=80, y=160)
+leds_on=Button(marco1,text="cont",command=update_label)
+leds_on.place(x=80, y=160)
 
 valor2.configure(textvariable=adc_data)
 valor2.place(x=130, y=90)
